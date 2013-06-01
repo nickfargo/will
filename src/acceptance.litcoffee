@@ -4,7 +4,7 @@ An **acceptance** is a `Deferral` that is both initialized and inherently
 finalized to its `accepted` state, effectively equivalent to an immediately
 accepted proper `Deferral`.
 
-See also: `Future.wrap`, `Rejection`
+See also: `Future.accept`, `Rejection`
 
     class Acceptance extends Deferral
 

@@ -1,8 +1,8 @@
 ## Future
 
 `Future` is an abstract base for classes such as `Deferral` or `Promise` that
-produce or convey **futures**, objects that represent a value that is not yet
-available.
+produce or convey **futures**, objects that represent a value that may not yet
+be available.
 
     class Future
 
@@ -11,16 +11,6 @@ available.
 
 
 ### Class functions
-
-
-#### wrap
-
-Boxes any value, or array of `values`, inside a new `accepted` `Deferral`.
-
-> This operation is useful for interacting with consumers that strictly expect
-  values to be delivered asynchronously via a `Future`-like interface.
-
-      @wrap: ( values ) -> new Acceptance values
 
 
 #### later
@@ -82,6 +72,26 @@ Retrieves the `then` method function from a presumably `thenable` object.
         if thenable? and ( typeof thenable is 'object' or
             typeof thenable is 'function' )
           method if typeof ( method = thenable.then ) is 'function'
+
+
+#### accept
+
+Boxes any value, or array of `values`, inside a new `accepted` `Deferral`.
+
+> Useful for sending values to consumers that expect a `Future`-like interface.
+
+      @accept: ( values ) -> new Acceptance values
+      @wrap: @accept
+
+
+#### reject
+
+Boxes any value, or array of `values`, inside a new `rejected` `Deferral`.
+
+> Useful for conveying a thrown exception to consumers that expect a
+  `Future`-like interface.
+
+      @reject: ( values ) -> new Rejection values
 
 
 
