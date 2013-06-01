@@ -80,6 +80,8 @@ Boxes any value, or array of `values`, inside a new `accepted` `Deferral`.
 
 > Useful for sending values to consumers that expect a `Future`-like interface.
 
+*Alias:* **wrap**
+
       @accept: ( values ) -> new Acceptance values
       @wrap: @accept
 
