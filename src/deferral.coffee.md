@@ -1,10 +1,12 @@
+    { slice } = Array::
+
+
 ## Deferral
 
 A **deferral** is the prototypical implementation of a `Future`.
 
     class Deferral extends Future
 
-      { slice } = Array::
       { later } = this
 
 
@@ -30,7 +32,7 @@ array if multiple callbacks are registered to a state.
 #### resolverToState
 
 Creates a function that explicitly resolves a `Deferral` to the concrete final
-`State` indicated by the curried `stateName`. This is used to define resolver
+`State` indicated by the enclosed `stateName`. This is used to define resolver
 methods, e.g. `accept` and `reject`, for a deferral’s `pending` state.
 
       @resolverToState = ( stateName ) -> ->
@@ -62,7 +64,13 @@ specific `resolved` substate.
 
 ### Methods
 
+
+#### resolver
+
       resolver: -> @_resolver or = new Resolver this
+
+
+#### promise
 
       promise: -> @_promise or = new Promise this
 
