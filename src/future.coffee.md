@@ -18,7 +18,7 @@ be available.
 Arranges for `callback` to be invoked after this event-loop turn is finished.
 (Does not pipe anything to a subsequent `Future`.)
 
-      @later:
+      @later =
         if process? and "#{ process }" is '[object process]'
           ( callback ) ->
             process.nextTick => callback.apply this, arguments
@@ -29,7 +29,7 @@ Arranges for `callback` to be invoked after this event-loop turn is finished.
             return
 
 
-#### assimilator
+#### assimilate
 
 Transforms an asynchronous function `fn` into a new function that returns a
 type-equivalent `Promise`. Accommodates conventional node-style async methods
@@ -37,7 +37,7 @@ and callbacks.
 
 ( [A], ( Error, [B] → void ) → void ) → ( [A] → Promise [B] )
 
-      @assimilator: ( fn ) -> ->
+      @assimilate = ( fn ) -> ->
         deferral = new Deferral
         args = slice.call arguments
         args.push ( error ) ->
@@ -54,7 +54,7 @@ Determines whether a `value` is, or can be expected to act as, a `Future`.
 
 *Aliases:* **resembles**, **resemblesFuture**
 
-      @isFuturoid: ( value ) ->
+      @isFuturoid = ( value ) ->
         return null unless value
         return value if value instanceof Future or
           ( typeof value is 'object' or typeof value is 'function' ) and
@@ -68,7 +68,7 @@ Determines whether a `value` is, or can be expected to act as, a `Future`.
 
 Retrieves the `then` method function from a presumably `thenable` object.
 
-      @getThenFrom: ( thenable ) ->
+      @getThenFrom = ( thenable ) ->
         if thenable? and ( typeof thenable is 'object' or
             typeof thenable is 'function' )
           method if typeof ( method = thenable.then ) is 'function'
@@ -79,11 +79,14 @@ Retrieves the `then` method function from a presumably `thenable` object.
 Boxes any value, or array of `values`, inside a new `accepted` `Deferral`.
 
 > Useful for sending values to consumers that expect a `Future`-like interface.
+  Also useful for type-disambiguation of objects that might otherwise be
+  mistaken for a futuroid, e.g. anything that incidentally contains a `then`
+  function.
 
-*Alias:* **wrap**
+*Aliases:* **of**, **wrap**
 
-      @accept: ( values ) -> new Acceptance values
-      @wrap: @accept
+      @accept = ( values ) -> new Acceptance values
+      @of = @wrap = @accept
 
 
 #### reject
