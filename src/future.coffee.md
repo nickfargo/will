@@ -7,7 +7,7 @@ be available.
     class Future
 
       { slice } = Array::
-      noContext = do -> this
+      NULL_CONTEXT = do -> this
 
 
 ### Class functions
@@ -111,7 +111,7 @@ Boxes any value, or array of `values`, inside a new `rejected` `Deferral`.
         @once 'accepted', if typeof onAccepted is 'function'
         then ->
           try
-            value = onAccepted.apply noContext, arguments
+            value = onAccepted.apply NULL_CONTEXT, arguments
             successor.resolve value if value isnt undefined
           catch error
             successor.reject error
@@ -121,7 +121,7 @@ Boxes any value, or array of `values`, inside a new `rejected` `Deferral`.
         @once 'rejected', if typeof onRejected is 'function'
         then ->
           try
-            value = onRejected.apply noContext, arguments
+            value = onRejected.apply NULL_CONTEXT, arguments
             successor.resolve value if value isnt undefined
           catch error
             successor.reject error
