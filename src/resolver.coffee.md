@@ -17,7 +17,7 @@ any knowledge as to whether it is still `pending` or yet `resolved`.
 
       constructor: ( deferral ) ->
         @_apply = ( method, args ) ->
-          throw ReferenceError unless method of methodNames
+          throw ReferenceError unless methodNames[ method ]?
           deferral[ method ].apply deferral, args
           this
 
