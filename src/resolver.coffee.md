@@ -10,9 +10,10 @@ any knowledge as to whether it is still `pending` or yet `resolved`.
 
     class Resolver
 
-      methodNames = do ( o = {} ) ->
-        o[k] = k for k in ['resolve', 'accept', 'reject']
-        o
+      methodNames = do ->
+        object = {}
+        object[ key ] = key for key in ['resolve', 'accept', 'reject']
+        object
 
       constructor: ( deferral ) ->
         @_apply = ( method, args ) ->
