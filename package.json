@@ -17,7 +17,7 @@
   ],
 
 
-  "main"          : "will.js",
+  "main"          : "./lib/index",
   "directories" : {
     "test"        : "test"
   },

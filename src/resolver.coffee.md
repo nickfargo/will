@@ -1,3 +1,7 @@
+    module.exports =
+
+
+
 ## Resolver
 
 A **resolver** is an attenuation of a `Deferral`, where consumers are allowed

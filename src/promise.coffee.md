@@ -1,3 +1,9 @@
+    Future = require './future'
+
+    module.exports =
+
+
+
 ## Promise
 
 A **promise** is an attenuation of a `Deferral`, where consumers are allowed

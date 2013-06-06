@@ -1,3 +1,14 @@
+    state    = require '/lab/restate'
+
+    Deferral = require './deferral'
+
+    { slice } = Array::
+    { isArray } = Array
+
+    module.exports =
+
+
+
 ## Acceptance
 
 An **acceptance** is a `Deferral` that is both initialized and inherently
@@ -15,7 +26,7 @@ Takes a value, or array of `values`, to be permanently enclosed by `this`
 finalized `Deferral`.
 
       constructor: ( values ) ->
-        @_values = if isArray values then values.slice() else [values]
+        @_values = if isArray values then slice.call values else [values]
 
 
 

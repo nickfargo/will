@@ -1,3 +1,11 @@
+    { isArray } = require './helpers'
+
+    { slice } = Array::
+
+    module.exports =
+
+
+
 ## Future
 
 `Future` is an abstract base for classes such as `Deferral` or `Promise` that
@@ -6,7 +14,6 @@ be available.
 
     class Future
 
-      { slice } = Array::
       NULL_CONTEXT = do -> this
 
 
@@ -132,3 +139,11 @@ Boxes any value, or array of `values`, inside a new `rejected` `Deferral`.
           successor.reject.apply successor, arguments
 
         successor.promise()
+
+
+
+### Declared forward
+
+    Deferral   = require './deferral'
+    Acceptance = require './acceptance'
+    Rejection  = require './rejection'

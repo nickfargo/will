@@ -1,4 +1,15 @@
+    state    = require '/lab/restate'
+
+    Future   = require './future'
+    Resolver = require './resolver'
+    Promise  = require './promise'
+
+    { isArray } = require './helpers'
+
     { slice } = Array::
+
+    module.exports =
+
 
 
 ## Deferral
