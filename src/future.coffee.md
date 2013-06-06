@@ -47,11 +47,16 @@ and callbacks. For functions whose callbacks should not expect a leading
 
 ( [A], ( Error, [B] → void ) → void ) → ( [A] → Promise [B] )
 
+if `infallible`:
+
+( [A], ( [B] → void ) → void ) → ( [A] → Promise [B] )
+
       @assimilate = ( fn, infallible = no ) -> ->
         deferral = new Deferral
         args = slice.call arguments
         args.push ( error ) ->
-          if infallible or not error?
+          return deferral.accept.apply deferral, arguments if infallible
+          unless error?
           then deferral.accept.apply deferral, slice.call arguments, 1
           else deferral.reject error
         fn.apply this, args
