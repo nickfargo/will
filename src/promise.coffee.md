@@ -7,7 +7,8 @@
 ## Promise
 
 A **promise** is an attenuation of a `Deferral`, where consumers are allowed
-only to observe the deferral’s resolution, and prohibited from affecting it.
+to observe the deferral’s resolution and react to it, but are prohibited from
+affecting it.
 
     class Promise extends Future
 
