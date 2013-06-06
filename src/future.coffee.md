@@ -35,15 +35,16 @@ Arranges for `callback` to be invoked after this event-loop turn is finished.
 
 Transforms an asynchronous function `fn` into a new function that returns a
 type-equivalent `Promise`. Accommodates conventional node-style async methods
-and callbacks.
+and callbacks. For functions whose callbacks should not expect a leading
+`error` argument, the `infallible` flag may be set to `true`.
 
 ( [A], ( Error, [B] → void ) → void ) → ( [A] → Promise [B] )
 
-      @assimilate = ( fn ) -> ->
+      @assimilate = ( fn, infallible = no ) -> ->
         deferral = new Deferral
         args = slice.call arguments
         args.push ( error ) ->
-          unless error
+          if infallible or not error?
           then deferral.accept.apply deferral, slice.call arguments, 1
           else deferral.reject error
         fn.apply this, args
