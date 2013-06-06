@@ -42,12 +42,12 @@ Arranges for `callback` to be invoked after this event-loop turn is finished.
 
 Transforms an asynchronous function `fn` into a new function that returns a
 type-equivalent `Promise`. Accommodates conventional node-style async methods
-and callbacks. For functions whose callbacks should not expect a leading
-`error` argument, the `infallible` flag may be set to `true`.
+and callbacks.
 
 ( [A], ( Error, [B] → void ) → void ) → ( [A] → Promise [B] )
 
-if `infallible`:
+For asynchronous functions whose callbacks should not expect a leading `error`
+argument, the `infallible` flag must be set to `true`.
 
 ( [A], ( [B] → void ) → void ) → ( [A] → Promise [B] )
 
