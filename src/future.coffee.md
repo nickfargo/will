@@ -20,12 +20,14 @@ Arranges for `callback` to be invoked after this event-loop turn is finished.
 
       @later =
         if process? and "#{ process }" is '[object process]'
-          ( callback ) ->
-            process.nextTick => callback.apply this, arguments
+          ( callback, args ) ->
+            args = [args] if args? and not isArray args
+            process.nextTick => callback.apply this, args
             return
         else
-          ( callback ) ->
-            setTimeout ( => callback.apply this, arguments ), 1
+          ( callback, args ) ->
+            args = [args] if args? and not isArray args
+            setTimeout ( => callback.apply this, args ), 1
             return
 
 

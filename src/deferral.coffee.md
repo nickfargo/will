@@ -58,7 +58,7 @@ asynchronously invoke or ignore such callbacks after a `Deferral` has reached a
 specific `resolved` substate.
 
       @invokeIff = ( boundStateName ) -> ( stateName, callback ) ->
-        later.call this, callback if stateName is boundStateName
+        later.call this, callback, @_values if stateName is boundStateName
 
 
 
