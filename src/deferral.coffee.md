@@ -1,4 +1,4 @@
-    state    = require '/lab/restate'
+    state    = require '../../restate'
 
     Future   = require './future'
     Resolver = require './resolver'

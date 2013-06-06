@@ -1,4 +1,4 @@
-    state    = require '/lab/restate'
+    state    = require '../../restate'
 
     Deferral = require './deferral'
 
