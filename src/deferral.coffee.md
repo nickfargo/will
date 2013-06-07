@@ -43,8 +43,10 @@ array if multiple callbacks are registered to a state.
 #### resolverToState
 
 Creates a function that explicitly resolves a `Deferral` to the concrete final
-`State` indicated by the enclosed `stateName`. This is used to define resolver
-methods, e.g. `accept` and `reject`, for a deferral’s `pending` state.
+`State` indicated by the enclosed `stateName`.
+
+> This is used to define resolver methods, e.g. `accept` and `reject`, for a
+  deferral’s `pending` state.
 
       @resolverToState = ( stateName ) -> ->
         queue = @_callbacks[ stateName ]
@@ -64,12 +66,13 @@ methods, e.g. `accept` and `reject`, for a deferral’s `pending` state.
 #### invokeIff
 
 Creates a function that invokes a `callback` on the next turn if and only if
-the provided `stateName` matches the `boundStateName`. This is used to either
-asynchronously invoke or ignore such callbacks after a `Deferral` has reached a
-specific `resolved` substate.
+the provided `stateName` matches the `boundStateName`.
+
+> This is used to either asynchronously invoke or ignore callbacks supplied to
+  `once` on a `Deferral` after it has reached a specific `resolved` substate.
 
       @invokeIff = ( boundStateName ) -> ( stateName, callback ) ->
-        later.call this, callback, @_values if stateName is boundStateName
+        later.call @_context, callback, @_values if stateName is boundStateName
 
 
 
@@ -110,8 +113,8 @@ resolver methods only have effect while in the `pending` state.
 
 ##### resolve
 
-Uses `value` to decide the fate of `this` deferral. If `value` may be assumed
-to be a `Future`-like “thenable”, its resolution is propagated to `this`.
+Uses `value` to decide the fate of `this` deferral. If `value` is a futuroid or
+“thenable”, its resolution is propagated to `this`.
 
           resolve: ( value ) ->
             try if then_ = getThenFrom value then return then_.call value,
