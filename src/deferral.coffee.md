@@ -104,6 +104,25 @@ overrides that describe a deferral’s specific behaviors within each state.
         pending: state 'initial', do =>
           { getThenFrom } = this
 
+##### as
+
+Prior to a deferral’s resolution, the `context` in which its callbacks will be
+invoked can be set.
+
+          as: ( @_context ) -> this
+
+##### given
+
+While a deferral is still `pending`, the arguments passed to its callbacks can
+be predetermined. These will be overridden if any arguments are later provided
+to a resolver method of `this` or a `Resolver`.
+
+          given: ( values ) ->
+            if values isnt undefined
+              @_values = if values is null then null
+              else if isArray values then values else [values]
+            this
+
 ##### accept, reject
 
 Because all concrete `State`s within the `resolved` domain are `final`, these
