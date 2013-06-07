@@ -129,12 +129,12 @@ Accepts a `callback` to be invoked when `this` deferral is resolved to the
 final `State` named by `stateName`.
 
           once: ( stateName, callback ) ->
-            { _callbacks } = this
-            return unless stateName of _callbacks
-            if target = _callbacks[ stateName ]
+            callbacks = @_callbacks
+            return if callbacks[ stateName ] is undefined
+            if target = callbacks[ stateName ]
               if isArray target then target.push callback
-              else _callbacks[ stateName ] = [ target, callback ]
-            else _callbacks[ stateName ] = callback
+              else callbacks[ stateName ] = [ target, callback ]
+            else callbacks[ stateName ] = callback
             return
 
 
