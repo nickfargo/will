@@ -28,7 +28,7 @@ A **deferral** is the prototypical implementation of a `Future`.
 Stores one or more callbacks per resolution state. Items are upgraded to an
 array if multiple callbacks are registered to a state.
 
-        @_callbacks = accepted: null, rejected: null
+        @_callbacks = null
 
         @_resolver = null
         @_promise = null
@@ -49,8 +49,9 @@ Creates a function that explicitly resolves a `Deferral` to the concrete final
   deferral’s `pending` state.
 
       @resolverToState = ( stateName ) -> ->
-        queue = @_callbacks[ stateName ]
-        @_callbacks = null
+        if callbacks = @_callbacks
+          queue = callbacks[ stateName ]
+          @_callbacks = null
         args = if arguments.length
         then @_values = slice.call arguments
         else @_values or = []
@@ -129,11 +130,10 @@ Accepts a `callback` to be invoked when `this` deferral is resolved to the
 final `State` named by `stateName`.
 
           once: ( stateName, callback ) ->
-            callbacks = @_callbacks
-            return if callbacks[ stateName ] is undefined
-            if target = callbacks[ stateName ]
-              if isArray target then target.push callback
-              else callbacks[ stateName ] = [ target, callback ]
+            callbacks = @_callbacks or = {}
+            if queue = callbacks[ stateName ]
+              if isArray queue then queue.push callback
+              else callbacks[ stateName ] = [ queue, callback ]
             else callbacks[ stateName ] = callback
             return
 
