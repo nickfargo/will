@@ -2,8 +2,6 @@
 
       state       : require '../../restate'
 
-      helpers     : require './helpers'
-
       Future      : require './future'
       Deferral    : require './deferral'
       Promise     : require './promise'

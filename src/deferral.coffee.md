@@ -4,7 +4,7 @@
     Resolver = require './resolver'
     Promise  = require './promise'
 
-    { isArray } = require './helpers'
+    { isArray } = require 'util'
 
     { slice } = Array::
 

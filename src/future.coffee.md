@@ -1,4 +1,4 @@
-    { isArray } = require './helpers'
+    { isArray } = require 'util'
 
     { slice } = Array::
 

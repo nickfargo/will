@@ -3,7 +3,7 @@
     Deferral = require './deferral'
 
     { slice } = Array::
-    { isArray } = Array
+    { isArray } = require 'util'
 
     module.exports =
 
