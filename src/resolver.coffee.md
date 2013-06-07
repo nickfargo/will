@@ -10,18 +10,28 @@ any knowledge as to whether it is still `pending` or yet `resolved`.
 
     class Resolver
 
-      methodNames = do ->
-        object = {}
-        object[ key ] = key for key in ['resolve', 'accept', 'reject']
-        object
+      methodNames = ['as', 'given', 'resolve', 'accept', 'reject']
+      allowed = do ( o = {} ) -> o[k] = k for k in methodNames; o
+
+
+### Constructor
 
       constructor: ( deferral ) ->
         @_apply = ( method, args ) ->
-          throw ReferenceError unless methodNames[ method ]?
+          throw ReferenceError unless allowed[ method ]?
           deferral[ method ].apply deferral, args
           this
 
-      for name of methodNames
-        @::[ name ] = do ( name ) -> -> @_apply name, arguments
+
+### Methods
+
+
+#### resolver
 
       resolver: -> this
+
+
+#### Generated resolution methods
+
+      for name in methodNames
+        @::[ name ] = do ( name ) -> -> @_apply name, arguments
