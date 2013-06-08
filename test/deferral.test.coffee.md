@@ -1,6 +1,4 @@
-    chai = require 'chai'
-    chai.use require 'chai-as-promised'
-    { expect } = chai
+    { expect } = require 'chai'
     { Deferral } = require '../'
     { nextTick } = process
 
