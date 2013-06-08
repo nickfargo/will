@@ -79,6 +79,9 @@ the provided `stateName` matches the `boundStateName`.
 
 ### Methods
 
+
+#### as, given
+
       as: -> this
       given: -> this
 
