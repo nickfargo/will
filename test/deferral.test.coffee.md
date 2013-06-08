@@ -144,16 +144,27 @@
                 do end
             expect( result ).to.equal undefined
 
-          it "can handle rejection and recover", ( end ) ->
+          it "handles and recovers from rejections and exceptions", ( end ) ->
             result =
-              jilt( 'you suck' )
+              jilt( "a calamity" )
               .then( -> )
               .then( null, ( reason ) ->
-                expect( reason ).to.equal 'you suck'
+                expect( reason ).to.equal "a calamity"
                 async( 3 ) )
               .then( double )
+              .then( jilt )
+              .then( -> )
+              .then( null, ( reason ) ->
+                expect( reason ).to.equal 6
+                async( 4 ) )
+              .then( -> throw "a tantrum" )
+              .then( -> )
+              .then( null, ( reason ) ->
+                expect( reason ).to.equal "a tantrum"
+                async( 5 ) )
+              .then( square )
               .once 'accepted', ( x ) ->
-                expect( x ).to.equal 6
+                expect( x ).to.equal 25
                 do end
             expect( result ).to.equal undefined
 
