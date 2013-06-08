@@ -115,9 +115,14 @@
       describe "propagation", ->
 
         describe "chaining", ->
-          async = ( args ) ->
-            ( d = new Deferral ).given args
-            nextTick -> do d.accept
+          async = ( value ) ->
+            d = new Deferral
+            nextTick -> d.accept value
+            d.promise()
+
+          jilt = ( reason ) ->
+            d = new Deferral
+            nextTick -> d.reject reason
             d.promise()
 
           double = ( x ) -> async x + x
@@ -136,6 +141,19 @@
               .then( Math.sqrt )
               .once 'accepted', ( x ) ->
                 expect( x ).to.equal 12
+                do end
+            expect( result ).to.equal undefined
+
+          it "can handle rejection and recover", ( end ) ->
+            result =
+              jilt( 'you suck' )
+              .then( -> )
+              .then( null, ( reason ) ->
+                expect( reason ).to.equal 'you suck'
+                async( 3 ) )
+              .then( double )
+              .once 'accepted', ( x ) ->
+                expect( x ).to.equal 6
                 do end
             expect( result ).to.equal undefined
 
