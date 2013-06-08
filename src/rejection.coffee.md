@@ -1,4 +1,4 @@
-    state    = require '../../restate'
+    state = require '../../restate'
 
     Deferral = require './deferral'
 
@@ -11,9 +11,9 @@
 
 ## Rejection
 
-A **rejection** is a `Deferral` that is both initialized and inherently
-finalized to its `rejected` state, effectively equivalent to an immediately
-rejected proper `Deferral`.
+An explicit **rejection** is a `Deferral` that is both initialized and
+inherently finalized to its `rejected` state, equivalent in effect to an
+immediately rejected proper `Deferral`.
 
 See also: `Future.reject`, `Acceptance`
 
