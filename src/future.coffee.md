@@ -89,29 +89,35 @@ Retrieves the `then` method function from a presumably `thenable` object.
           method if typeof ( method = thenable.then ) is 'function'
 
 
-#### accept
+#### resolve
 
-Boxes any value, or array of `values`, inside a new `accepted` `Deferral`.
+Boxes a `value` or array of values inside a new already-`resolved` `Deferral`.
 
-> Useful for sending values to consumers that expect a `Future`-like interface.
-  Also useful for type-disambiguation of objects that might otherwise be
-  mistaken for a futuroid, e.g. anything that incidentally contains a `then`
-  function.
+> Useful for sending values or propagating exceptions to consumers that expect
+  a `Future`-like interface.
 
 *Aliases:* **of**, **wrap**
 
-      @accept = ( values ) -> new Acceptance values
-      @of = @wrap = @accept
+      @resolve = ( value ) ->
+        unless ( value instanceof Error ) or
+          isArray( value ) and value[0] instanceof Error
+        then @accept value
+        else @reject value
+      @of = @wrap = @resolve
+
+
+#### accept
+
+Boxes any `value`, or array of values, inside a new `accepted` `Deferral`.
+
+      @accept = ( value ) -> new Acceptance value
 
 
 #### reject
 
-Boxes any value, or array of `values`, inside a new `rejected` `Deferral`.
+Boxes any `value`, or array of values, inside a new `rejected` `Deferral`.
 
-> Useful for conveying a thrown exception to consumers that expect a
-  `Future`-like interface.
-
-      @reject: ( values ) -> new Rejection values
+      @reject: ( value ) -> new Rejection value
 
 
 
