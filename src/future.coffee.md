@@ -1,4 +1,4 @@
-    { isArray } = require 'util'
+    { isArray, isError } = require 'util'
 
     { slice } = Array::
 
@@ -25,7 +25,7 @@ be available.
 Arranges for `callback` to be invoked after this event-loop turn is finished.
 (Does not pipe anything to a subsequent `Future`.)
 
-      @later =
+      @later = later =
         if process? and "#{ process }" is '[object process]'
           ( callback, args ) ->
             args = [args] if args? and not isArray args
@@ -98,9 +98,8 @@ Boxes a `value` or array of values inside a new already-`resolved` `Deferral`.
 
 *Aliases:* **of**, **wrap**
 
-      @resolve = ( value ) ->
-        unless ( value instanceof Error ) or
-          isArray( value ) and value[0] instanceof Error
+      @resolve = ( value ) =>
+        unless ( isError value ) or isArray( value ) and isError value[0]
         then @accept value
         else @reject value
       @of = @wrap = @resolve
@@ -118,6 +117,17 @@ Boxes any `value`, or array of values, inside a new `accepted` `Deferral`.
 Boxes any `value`, or array of values, inside a new `rejected` `Deferral`.
 
       @reject = ( value ) -> new Rejection value
+
+
+#### willBe
+
+Returns a still-`pending` `Promise` for a closed `value`. The promise’s fate is
+sealed, but is not revealed to consumers until after the end of this turn.
+
+      @willBe = ( value ) ->
+        deferral = new Deferral
+        later -> deferral.resolve value
+        deferral.promise()
 
 
 
