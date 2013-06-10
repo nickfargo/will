@@ -117,7 +117,7 @@ Boxes any `value`, or array of values, inside a new `accepted` `Deferral`.
 
 Boxes any `value`, or array of values, inside a new `rejected` `Deferral`.
 
-      @reject: ( value ) -> new Rejection value
+      @reject = ( value ) -> new Rejection value
 
 
 
