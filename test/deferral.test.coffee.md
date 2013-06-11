@@ -1,5 +1,6 @@
     { expect } = require 'chai'
-    { Deferral } = require '../'
+    { Future, Deferral } = require '../'
+    { willBe } = Future
     { nextTick } = process
 
     log = -> console.log.apply log, arguments
@@ -132,9 +133,11 @@
             .then( double )
             .then( double )
 
+          increment = ( x ) -> async x + 1
+
+
           it "chains async, sync, and composite async functions", ( end ) ->
-            result =
-              async( 3 )
+            result = willBe( 3 )
               .then( double )
               .then( square )
               .then( quadruple )
@@ -145,11 +148,10 @@
             expect( result ).to.equal undefined
 
           it "handles and recovers from rejections and exceptions", ( end ) ->
-            result =
-              jilt( "a calamity" )
+            result = willBe( err = new Error )
               .then( -> )
               .then( null, ( reason ) ->
-                expect( reason ).to.equal "a calamity"
+                expect( reason ).to.equal err
                 async( 3 ) )
               .then( double )
               .then( jilt )
