@@ -99,9 +99,9 @@ Boxes a `value` or array of values inside a new already-`resolved` `Deferral`.
 *Aliases:* **of**, **wrap**
 
       @resolve = ( value ) =>
-        unless ( isError value ) or isArray( value ) and isError value[0]
-        then @accept value
-        else @reject value
+        if ( isError value ) or ( isArray value ) and isError value[0]
+        then @reject value
+        else @accept value
       @of = @wrap = @resolve
 
 
@@ -126,7 +126,9 @@ sealed, but is not revealed to consumers until after the end of this turn.
 
       @willBe = ( value ) ->
         deferral = new Deferral
-        later -> deferral.resolve value
+        later if ( isError value ) or ( isArray value ) and isError value[0]
+        then -> deferral.reject value
+        else -> deferral.accept value
         deferral.promise()
 
 
