@@ -116,20 +116,15 @@
       describe "propagation", ->
 
         describe "chaining", ->
-          async = ( value ) ->
-            d = new Deferral
-            nextTick -> d.accept value
-            d.promise()
-
-          jilt = ( reason ) ->
+          reject = ( reason ) ->
             d = new Deferral
             nextTick -> d.reject reason
             d.promise()
 
-          double = ( x ) -> async x + x
-          square = ( x ) -> async x * x
+          double = ( x ) -> willBe x + x
+          square = ( x ) -> willBe x * x
           quadruple = ( x ) ->
-            async( x )
+            willBe( x )
             .then( double )
             .then( double )
 
@@ -152,18 +147,18 @@
               .then( -> )
               .then( null, ( reason ) ->
                 expect( reason ).to.equal err
-                async( 3 ) )
+                willBe( 3 ) )
               .then( double )
-              .then( jilt )
+              .then( reject )
               .then( -> )
               .then( null, ( reason ) ->
                 expect( reason ).to.equal 6
-                async( 4 ) )
+                willBe( 4 ) )
               .then( -> throw "a tantrum" )
               .then( -> )
               .then( null, ( reason ) ->
                 expect( reason ).to.equal "a tantrum"
-                async( 5 ) )
+                willBe( 5 ) )
               .then( square )
               .once 'accepted', ( x ) ->
                 expect( x ).to.equal 25
