@@ -143,8 +143,10 @@ Uses `value` to decide the fate of `this` deferral. If `value` is a futuroid or
 “thenable”, its resolution is propagated to `this`.
 
           resolve: ( value ) ->
+            return @reject new TypeError if value is this
             try if then_ = getThenFrom value then return then_.call value,
-              => @resolve.apply this, arguments
+              ( next ) => ( if next is value then @accept else @resolve )
+                .apply this, arguments
               => @reject.apply this, arguments
             catch error then return @reject error
             @accept value
