@@ -5,8 +5,8 @@
 ## Resolver
 
 A **resolver** is an attenuation of a `Deferral`, where consumers are allowed
-to attempt to *affect* the deferral’s resolution state, but can neither
-*observe* its state nor *react* to its resolution.
+to attempt to affect the deferral’s resolution state, but can neither observe
+its state nor react to its resolution.
 
     class Resolver
 
