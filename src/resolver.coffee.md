@@ -10,17 +10,22 @@ to attempt to *affect* the deferral’s resolution state, but can neither
 
     class Resolver
 
-      methodNames = ['as', 'given', 'resolve', 'accept', 'reject']
-      allowed = do ( o = {} ) -> o[k] = k for k in methodNames; o
+      allowed =
+        as: yes
+        given: yes
+        resolve: yes
+        accept: yes
+        reject: yes
 
 
 ### Constructor
 
       constructor: ( deferral ) ->
         @_apply = ( method, args ) ->
-          throw ReferenceError unless allowed[ method ]?
+          throw ReferenceError unless allowed[ method ]
           deferral[ method ].apply deferral, args
           this
+
 
 
 ### Methods
@@ -33,5 +38,5 @@ to attempt to *affect* the deferral’s resolution state, but can neither
 
 #### Generated methods
 
-      for name in methodNames
+      for name of allowed
         @::[ name ] = do ( name ) -> -> @_apply name, arguments
