@@ -36,7 +36,7 @@ from affecting it.
       promise: -> this
 
 
-#### Generated methods
+#### Reflected `Deferral` methods: [getStateName, once]
 
       for name of allowed
         @::[ name ] = do ( name ) -> -> @_apply name, arguments

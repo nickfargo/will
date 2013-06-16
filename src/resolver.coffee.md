@@ -36,7 +36,7 @@ its state nor react to its resolution.
       resolver: -> this
 
 
-#### Generated methods
+#### Reflected `Deferral` methods: [as, given, resolve, accept, reject]
 
       for name of allowed
         @::[ name ] = do ( name ) -> -> @_apply name, arguments
