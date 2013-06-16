@@ -22,7 +22,7 @@ to attempt to *affect* the deferral’s resolution state, but can neither
 
       constructor: ( deferral ) ->
         @_apply = ( method, args ) ->
-          throw ReferenceError unless allowed[ method ]
+          return unless allowed[ method ]
           deferral[ method ].apply deferral, args
           this
 

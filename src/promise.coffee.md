@@ -21,7 +21,7 @@ prohibited from *affecting* it.
 
       constructor: ( deferral ) ->
         @_apply = ( method, args ) ->
-          throw ReferenceError unless allowed[ method ]
+          return unless allowed[ method ]
           result = deferral[ method ].apply deferral, args
           result = this if result is deferral
           result
