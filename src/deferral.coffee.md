@@ -105,51 +105,9 @@ overrides that describe a deferral’s specific behaviors within each state.
       state @::, 'abstract',
 
 
-#### pending
+#### unresolved
 
-        pending: state 'initial', do =>
-          { getThenFrom } = this
-
-##### as
-
-Prior to a deferral’s resolution, the `context` in which its callbacks will be
-invoked can be set.
-
-          as: ( @_context ) -> this
-
-##### given
-
-While a deferral is still `pending`, the arguments passed to its callbacks can
-be predetermined. These will be overridden if any arguments are later provided
-to a resolver method of `this` or a `Resolver`.
-
-          given: ( values ) ->
-            if values isnt undefined
-              @_values = if values is null then null
-              else if isArray values then values else [values]
-            this
-
-##### accept, reject
-
-Because all concrete `State`s within the `resolved` domain are `final`, these
-resolver methods only have effect while in the `pending` state.
-
-          accept: @resolverToState 'accepted'
-          reject: @resolverToState 'rejected'
-
-##### resolve
-
-Uses `value` to decide the fate of `this` deferral. If `value` is a futuroid or
-“thenable”, its resolution is propagated to `this`.
-
-          resolve: ( value ) ->
-            return @reject new TypeError if value is this
-            try if then_ = getThenFrom value then return then_.call value,
-              ( next ) => ( if next is value then @accept else @resolve )
-                .apply this, arguments
-              => @reject.apply this, arguments
-            catch error then return @reject error
-            @accept value
+        unresolved: state 'abstract',
 
 ##### once
 
@@ -163,6 +121,53 @@ final `State` named by `stateName`.
               else callbacks[ stateName ] = [ queue, callback ]
             else callbacks[ stateName ] = callback
             return
+
+
+#### unresolved.pending
+
+          pending: state 'initial', do =>
+            { getThenFrom } = this
+
+##### as
+
+Prior to a deferral’s resolution, the `context` in which its callbacks will be
+invoked can be set.
+
+            as: ( @_context ) -> this
+
+##### given
+
+While a deferral is still `pending`, the arguments passed to its callbacks can
+be predetermined. These will be overridden if any arguments are later provided
+to a resolver method of `this` or a `Resolver`.
+
+            given: ( values ) ->
+              if values isnt undefined
+                @_values = if values is null then null
+                else if isArray values then values else [values]
+              this
+
+##### accept, reject
+
+Because all concrete `State`s within the `resolved` domain are `final`, these
+resolver methods only have effect while in the `pending` state.
+
+            accept: @resolverToState 'accepted'
+            reject: @resolverToState 'rejected'
+
+##### resolve
+
+Uses `value` to decide the fate of `this` deferral. If `value` is a futuroid or
+“thenable”, its resolution is propagated to `this`.
+
+            resolve: ( value ) ->
+              return @reject new TypeError if value is this
+              try if then_ = getThenFrom value then return then_.call value,
+                ( next ) => ( if next is value then @accept else @resolve )
+                  .apply this, arguments
+                => @reject.apply this, arguments
+              catch error then return @reject error
+              @accept value
 
 
 #### resolved
