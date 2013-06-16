@@ -165,7 +165,7 @@ sealed, but is not revealed to consumers until after the end of this turn.
 
 
 
-### Declared forward
+### Forward imports
 
     Deferral   = require './deferral'
     Acceptance = require './acceptance'

@@ -5,8 +5,8 @@
 ## Resolver
 
 A **resolver** is an attenuation of a `Deferral`, where consumers are allowed
-only to attempt to affect the deferral’s resolution state, but are not given
-any knowledge as to whether it is still `pending` or yet `resolved`.
+to attempt to *affect* the deferral’s resolution state, but can neither
+*observe* its state nor *react* to its resolution.
 
     class Resolver
 
@@ -31,7 +31,7 @@ any knowledge as to whether it is still `pending` or yet `resolved`.
       resolver: -> this
 
 
-#### Generated resolution methods
+#### Generated methods
 
       for name in methodNames
         @::[ name ] = do ( name ) -> -> @_apply name, arguments

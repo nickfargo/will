@@ -7,14 +7,17 @@
 ## Promise
 
 A **promise** is an attenuation of a `Deferral`, where consumers are allowed
-to observe the deferral’s resolution and react to it, but are prohibited from
-affecting it.
+to *observe* the deferral’s state and *react* to its resolution, but are
+prohibited from *affecting* it.
 
     class Promise extends Future
 
       allowed =
         getStateName: yes
         once: yes
+
+
+### Constructor
 
       constructor: ( deferral ) ->
         @_apply = ( method, args ) ->
@@ -24,6 +27,16 @@ affecting it.
           result
 
 
+
+### Methods
+
+
+#### promise
+
       promise: -> this
+
+
+#### Generated methods
+
       for name of allowed
         @::[ name ] = do ( name ) -> -> @_apply name, arguments
