@@ -12,8 +12,18 @@ affecting it.
 
     class Promise extends Future
 
+      allowed =
+        getStateName: yes
+        once: yes
+
       constructor: ( deferral ) ->
-        @once = -> deferral.once.apply deferral, arguments
-        @getState = -> deferral.state().name
+        @_apply = ( method, args ) ->
+          throw ReferenceError unless allowed[ method ]
+          result = deferral[ method ].apply deferral, args
+          result = this if result is deferral
+          result
+
 
       promise: -> this
+      for name of allowed
+        @::[ name ] = do ( name ) -> -> @_apply name, arguments

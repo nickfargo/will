@@ -80,6 +80,11 @@ the provided `stateName` matches the `boundStateName`.
 ### Methods
 
 
+#### getStateName
+
+      getStateName: -> @state().name
+
+
 #### as, given
 
       as: -> this
