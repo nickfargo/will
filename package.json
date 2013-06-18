@@ -17,12 +17,13 @@
   ],
 
 
-  "main"          : "./lib/index",
+  "main"          : "lib/index",
   "directories" : {
     "test"        : "test"
   },
   "scripts": {
-    "test"        : "echo \"Error: no test specified\" && exit 1"
+    "prepublish"  : "bin/compile && bin/test -R progress",
+    "test"        : "bin/test -R spec"
   },
 
 
@@ -30,6 +31,7 @@
     "state"       : "~0.1.0"
   },
   "devDependencies" : {
-    "chai"                   : ">=1.5.0"
+    "mocha"       : "*",
+    "chai"        : ">=1.5.0"
   }
 }
