@@ -1,6 +1,6 @@
     module.exports =
 
-      state       : require '../../restate'
+      state       : require 'state'
 
       Future      : require './future'
       Deferral    : require './deferral'
