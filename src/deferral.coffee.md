@@ -14,7 +14,10 @@
 
 ## Deferral
 
-A **deferral** is the prototypical implementation of a `Future`.
+A **deferral** is the prototypical implementation of a `Future`, representing a
+value that may or may not yet be available. A `Deferral` instance can be
+attenuated to its observable properties as a `Promise`, and can be attenuated
+to its actionable capabilities as a `Resolver`.
 
     class Deferral extends Future
 
@@ -87,10 +90,16 @@ the provided `stateName` matches the `boundStateName`.
 
 #### resolver
 
+Issues a `Resolver` that attenuates the actionable capabilities of `this`
+`Deferral`.
+
       resolver: -> @_resolver or = new Resolver this
 
 
 #### promise
+
+Issues a `Promise` that attenuates the observable properties of `this`
+`Deferral`.
 
       promise: -> @_promise or = new Promise this
 
@@ -98,8 +107,9 @@ the provided `stateName` matches the `boundStateName`.
 
 ### States
 
-Defines concrete states [`pending`, `accepted`, `rejected`], and the method
-overrides that describe a deferral’s specific behaviors within each state.
+`Deferral` uses the **[State][]** library to explicitly define concrete states
+[`pending`, `accepted`, `rejected`], expressions of their shared abstractions,
+and methods that describe a deferral’s specific behaviors within each state.
 
       state @::, 'abstract',
 
@@ -145,9 +155,9 @@ invoked can be set.
 
 ##### given
 
-While a deferral is still `pending`, the arguments passed to its callbacks can
-be predetermined. These will be overridden if any arguments are later provided
-to a resolver method of `this` or a `Resolver`.
+Prior to a deferral’s resolution, the arguments passed to its callbacks can be
+predetermined. These will be overridden if any arguments are later provided to
+a resolver method of `this` or a `Resolver`.
 
             given: ( values ) ->
               if values isnt undefined
@@ -198,3 +208,8 @@ Uses `value` to decide the fate of `this` deferral. If `value` is a futuroid or
 
             rejected: state 'final',
               once: @invokeIff 'rejected'
+
+
+
+
+[State]: http://statejs.org/
