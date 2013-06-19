@@ -161,21 +161,15 @@ sealed, but is not revealed to consumers until after the end of this turn.
 
         @once 'accepted', if typeof onAccepted is 'function'
         then ->
-          try
-            value = onAccepted.apply NULL_CONTEXT, arguments
-            successor.resolve value if value isnt undefined
-          catch error
-            successor.reject error
+          try successor.resolve onAccepted.apply NULL_CONTEXT, arguments
+          catch error then successor.reject error
         else ->
           successor.accept.apply successor, arguments
 
         @once 'rejected', if typeof onRejected is 'function'
         then ->
-          try
-            value = onRejected.apply NULL_CONTEXT, arguments
-            successor.resolve value if value isnt undefined
-          catch error
-            successor.reject error
+          try successor.resolve onRejected.apply NULL_CONTEXT, arguments
+          catch error then successor.reject error
         else ->
           successor.reject.apply successor, arguments
 
