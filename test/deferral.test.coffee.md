@@ -1,6 +1,6 @@
     { expect } = require 'chai'
     { Future, Deferral } = require '../'
-    { willBe } = Future
+    { later, willBe, join } = Future
     { nextTick } = process
 
     log = -> console.log.apply log, arguments
@@ -175,3 +175,36 @@
             do end
           expect( d._callbacks ).not.to.equal null
           nextTick -> do d.accept
+
+
+      describe "joining", ->
+
+        it "accepts only after all futures are accepted", ( end ) ->
+          join( willBe i for i in [0..4] ).then ( values ) ->
+            expect( values ).to.be.instanceof Array
+            do end
+
+        it "rejects immediately once any future is rejected", ( end ) ->
+          a = new Array 3
+          a[0] = willBe 0
+          a[1] = willBe new Error "rejection"
+          a[2] = willBe 2
+          join(a).then null, ( error, index, values ) ->
+            expect( a[0].getStateName() ).to.equal 'accepted'
+            expect( a[1].getStateName() ).to.equal 'rejected'
+            expect( a[2].getStateName() ).to.equal 'pending'
+            expect( error?.message ).to.equal "rejection"
+            expect( index ).to.equal 1
+            expect( values[0] ).to.equal 0
+            expect( values[1] ).to.equal error
+            expect( values[2] ).to.equal undefined
+            do end
+
+        it "preserves order of received array in returned results", ( end ) ->
+          a = new Array 5
+          a[i] = willBe i for i in [4..0] by -1
+          join(a).then ( values ) ->
+            ordered = yes
+            ( ordered = no; break ) for i in values when values[i] isnt i
+            expect( ordered ).to.equal yes
+            do end

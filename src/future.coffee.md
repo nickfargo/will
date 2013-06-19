@@ -132,6 +132,24 @@ sealed, but is not revealed to consumers until after the end of this turn.
         deferral.promise()
 
 
+#### join
+
+      @join = ( futures ) ->
+        return unless length = futures?.length
+        count = 0
+        results = new Array length
+        deferral = new Deferral
+        for future, index in futures
+          onAccepted = do ( index ) -> ( value ) ->
+            results[ index ] = value
+            deferral.accept results if ++count is length
+          onRejected = do ( index ) -> ( error ) ->
+            results[ index ] = error
+            deferral.reject error, index, results
+          future.then onAccepted, onRejected
+        deferral.promise()
+
+
 
 ### Methods
 
