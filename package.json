@@ -3,7 +3,8 @@
   "version"       : "0.0.0",
   "description"   : "Flexible futures",
   "homepage"      : "",
-  "keywords"      : [ "future", "promise", "deferred", "deferral", "async" ],
+  "keywords"      : [ "future", "promise", "deferred", "deferral", "async",
+                      "promises-aplus" ],
   "author"        : "Nick Fargo",
   "repository"    : {
     "type"        : "git",
@@ -31,7 +32,8 @@
     "state"       : "~0.1.0"
   },
   "devDependencies" : {
-    "mocha"       : "*",
-    "chai"        : ">=1.5.0"
+    "mocha"                 : "*",
+    "chai"                  : ">=1.5.0",
+    "promises-aplus-tests"  : "*"
   }
 }
