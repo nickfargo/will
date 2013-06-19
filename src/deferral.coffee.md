@@ -85,12 +85,6 @@ the provided `stateName` matches the `boundStateName`.
       getStateName: -> @state().name
 
 
-#### as, given
-
-      as: -> this
-      given: -> this
-
-
 #### resolver
 
       resolver: -> @_resolver or = new Resolver this
@@ -108,6 +102,15 @@ Defines concrete states [`pending`, `accepted`, `rejected`], and the method
 overrides that describe a deferral’s specific behaviors within each state.
 
       state @::, 'abstract',
+
+
+##### as, given
+
+These methods always return `this`, but have no effect outside the `pending`
+state, so a default implementation is defined here in the abstract root state.
+
+        as: -> this
+        given: -> this
 
 
 #### unresolved
