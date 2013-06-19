@@ -49,6 +49,7 @@ Creates a function that explicitly resolves a `Deferral` to the concrete final
   deferral’s `pending` state.
 
       @resolverToState = ( stateName ) -> ->
+        @state().go stateName
         if callbacks = @_callbacks
           queue = callbacks[ stateName ]
           @_callbacks = null
@@ -60,7 +61,6 @@ Creates a function that explicitly resolves a `Deferral` to the concrete final
           if isArray queue
           then callback.apply _context, args for callback in queue
           else queue.apply _context, args
-        @state().go stateName
         return
 
 
