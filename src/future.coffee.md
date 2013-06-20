@@ -1,5 +1,6 @@
-    { isArray, isError } = require 'util'
+    { isError } = require 'util'
 
+    { isArray } = require 'omicron'
     { slice } = Array::
 
     module.exports =
