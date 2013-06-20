@@ -185,14 +185,15 @@
             do end
 
         it "rejects immediately once any future is rejected", ( end ) ->
-          a = new Array 3
-          a[0] = willBe 0
-          a[1] = willBe new Error "rejection"
-          a[2] = willBe 2
-          join(a).then null, ( error, index, values ) ->
-            expect( a[0].getStateName() ).to.equal 'accepted'
-            expect( a[1].getStateName() ).to.equal 'rejected'
-            expect( a[2].getStateName() ).to.equal 'pending'
+          futures = [
+            willBe 0
+            willBe new Error "rejection"
+            willBe 2
+          ]
+          join( futures ).then null, ( values, order, error, index ) ->
+            expect( futures[0].getStateName() ).to.equal 'accepted'
+            expect( futures[1].getStateName() ).to.equal 'rejected'
+            expect( futures[2].getStateName() ).to.equal 'pending'
             expect( error?.message ).to.equal "rejection"
             expect( index ).to.equal 1
             expect( values[0] ).to.equal 0
@@ -201,9 +202,9 @@
             do end
 
         it "preserves order of received array in returned results", ( end ) ->
-          a = new Array 5
-          a[i] = willBe i for i in [4..0] by -1
-          join(a).then ( values ) ->
+          futures = new Array 5
+          futures[i] = willBe i for i in [4..0] by -1
+          join( futures ).then ( values ) ->
             ordered = yes
             ( ordered = no; break ) for i in values when values[i] isnt i
             expect( ordered ).to.equal yes
