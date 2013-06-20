@@ -29,9 +29,11 @@
 
 
   "dependencies" : {
+    "omicron"     : ">=0.1.9",
     "state"       : "~0.1.0"
   },
   "devDependencies" : {
+    "coffee-script"         : "~1.6.3",
     "mocha"                 : "*",
     "chai"                  : ">=1.5.0",
     "promises-aplus-tests"  : "*"
