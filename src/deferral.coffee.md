@@ -78,6 +78,14 @@ the provided `stateName` matches the `boundStateName`.
         later.call @_context, callback, @_values if stateName is boundStateName
 
 
+#### promise
+
+> Of use only with finalized `Deferral` subclasses such as `Acceptance` and
+  `Rejection`.
+
+      @promise = -> ( new this ).promise()
+
+
 
 ### Methods
 
