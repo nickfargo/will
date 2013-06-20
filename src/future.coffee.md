@@ -135,24 +135,140 @@ determined, but is not resolved or observable until after the end of this turn.
 
 #### join
 
-      @join = ( futures ) ->
-        return unless length = futures?.length
+Unifies the resolutions of an array of `futures` as a single `Promise`.
+
+###### PARAMETERS
+
+* `futures` : array — An ordered list whose elements are each a future, a
+  future-returning thunk, or any other value to be resolved as a `Future`.
+
+* `limit` : number — The returned promise will `accept` once this many of the
+  substituent `futures` have resolved to the expected outcome as indicated by
+  `positive`, or will `reject` once too many `futures` have resolved against
+  the expected outcome.
+
+* `positive` : boolean — Indicates the **polarity** of the `join` operation.
+  When `true` (default), the returned promise will `accept` once a sufficient
+  number of the joined `futures` are accepted/fulfilled, and `reject` once too
+  many `futures` are rejected. When `false`, the resolutions of the returned
+  promise are reversed: it will `reject` when enough `futures` are accepted
+  and `accept` when too many `futures` are rejected.
+
+###### RETURNS
+
+`join` returns a returned `Promise` that will resolve with multiple arguments.
+Callbacks that consume the promise may include parameters for:
+
+* `results` : array — The list of resolved values from each of the `futures`.
+  This list will include `undefined` values for `futures` that have not yet
+  resolved by the time the returned promise is resolved (`limit < length`). The
+  order of `results` will correspond with the order of the provided `futures`.
+
+* `order` : array — A map of indices that indicate the temporal order in which
+  each of the `futures` were resolved. The keys of `order` will correspond with
+  the keys/indices of `results` and `futures`.
+
+* `payload` : any — The value or error of the triggering element of `futures`
+  which caused the `join` operation to resolve.
+
+* `index` : number — The index of the triggering element of `futures`, such
+  that `results[index]` is `payload`.
+
+###### SEE ALSO
+
+`all`, `none`, `any`, `notAny`
+
+###### SOURCE
+
+      @join = join = ( futures, limit, positive = yes ) ->
+        throw TypeError unless ( length = futures?.length )?
+        limit = length unless limit?
+        throw RangeError unless 0 <= limit <= length
+        if length is 0 or limit is 0
+          return ( if positive then Rejection else Acceptance ).promise()
+
+        { isFuturoid, resolve } = Future
         count = 0
-        results = new Array length
+        results = Array length
+        order = []
         deferral = new Deferral
+
         for future, index in futures
-          onAccepted = do ( index ) -> ( value ) ->
-            results[ index ] = value
-            deferral.accept results if ++count is length
-          onRejected = do ( index ) -> ( error ) ->
-            results[ index ] = error
-            deferral.reject error, index, results
-          future.then onAccepted, onRejected
+          future = future() if typeof future is 'function'
+          future = resolve future unless isFuturoid future
+
+          expectation = do ( index ) -> ( payload ) ->
+            results[ index ] = payload
+            order.push index
+            if ++count >= limit
+              deferral.accept results, order, payload, index
+
+          contingency = do ( index ) -> ( payload ) ->
+            results[ index ] = payload
+            order.push index
+            if --length < limit
+              deferral.reject results, order, payload, index
+
+          if positive
+          then onAccepted = expectation; onRejected = contingency
+          else onAccepted = contingency; onRejected = expectation
+          method = if future instanceof Future then 'bind' else 'then'
+          future[ method ] onAccepted, onRejected
+
         deferral.promise()
+
+
+#### all
+
+Specializes `join` to the default case, where the returned `Promise` will
+`accept` only after all `futures` are accepted (fulfilled), and will `reject`
+immediately after any one of the `futures` is rejected.
+
+      @all = ( futures ) -> join futures
+
+
+#### none
+
+Specializes `join` to define the polar opposite of `all`, where the returned
+`Promise` will `accept` only after all `futures` are rejected, and will
+`reject` immediately after any one of the `futures` is accepted.
+
+      @none = ( futures ) -> join futures, null, no
+
+
+#### any
+
+Specializes `join` to define a **race**, where the returned `Promise` will
+`accept` after any subset of `futures` of size `limit` are accepted, and will
+`reject` after enough `futures` have rejected to make acceptance impossible.
+
+      @any = ( limit, futures ) ->
+        if futures is undefined then futures = limit; limit = 1
+        join futures, limit
+
+
+#### notAny
+
+Specializes `join` to define a negative race, where the returned `Promise` will
+`accept` after any subset of `futures` of size `limit` are rejected, and will
+`reject` after enough `futures` have accepted to make acceptance impossible.
+
+      @notAny = ( limit, futures ) ->
+        if futures is undefined then futures = limit; limit = 1
+        join futures, limit, no
 
 
 
 ### Methods
+
+
+#### bind
+
+      bind: ( onAccepted, onRejected ) ->
+        @once 'accepted', onAccepted if typeof onAccepted is 'function'
+        @once 'rejected', onRejected if typeof onRejected is 'function'
+        return
+      done: @::bind
 
 
 #### then
