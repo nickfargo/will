@@ -14,9 +14,9 @@
 ## Deferral
 
 A **deferral** is the prototypical implementation of a `Future`, representing a
-value that may or may not yet be available. A `Deferral` instance can be
-attenuated to its observable properties as a `Promise`, and can be attenuated
-to its actionable capabilities as a `Resolver`.
+value that may or may not yet be available. A `Deferral` instance can be both
+attenuated to its observable properties as a `Promise`, and attenuated to its
+actionable capabilities as a `Resolver`.
 
     class Deferral extends Future
 

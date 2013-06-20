@@ -123,7 +123,7 @@ Boxes any `value`, or array of values, inside a new `rejected` `Deferral`.
 #### willBe
 
 Returns a still-`pending` `Promise` for a closed `value`. The promise’s fate is
-sealed, but is not revealed to consumers until after the end of this turn.
+determined, but is not resolved or observable until after the end of this turn.
 
       @willBe = ( value ) ->
         deferral = new Deferral
