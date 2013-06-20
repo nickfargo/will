@@ -1,10 +1,9 @@
-    state    = require 'state'
+    { isArray } = require 'omicron'
+    state       = require 'state'
 
-    Future   = require './future'
-    Resolver = require './resolver'
-    Promise  = require './promise'
-
-    { isArray } = require 'util'
+    Future      = require './future'
+    Resolver    = require './resolver'
+    Promise     = require './promise'
 
     { slice } = Array::
 
