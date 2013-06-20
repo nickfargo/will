@@ -39,20 +39,20 @@ Arranges for `callback` to be invoked after this event-loop turn is finished.
             return
 
 
-#### assimilate
+#### transform
 
 Transforms an asynchronous function `fn` into a new function that returns a
 type-equivalent `Promise`. Accommodates conventional node-style async methods
 and callbacks.
 
-( [A], ( Error, [B] → void ) → void ) → ( [A] → Promise [B] )
+> ( [A], ( Error, [B] → void ) → void ) → ( [A] → Promise [B] )
 
 For asynchronous functions whose callbacks should not expect a leading `error`
 argument, the `infallible` flag must be set to `true`.
 
-( [A], ( [B] → void ) → void ) → ( [A] → Promise [B] )
+> ( [A], ( [B] → void ) → void ) → ( [A] → Promise [B] )
 
-      @assimilate = ( fn, infallible = no ) -> ->
+      @transform = ( fn, infallible = no ) -> ->
         deferral = new Deferral
         args = slice.call arguments
         args.push ( error ) ->
