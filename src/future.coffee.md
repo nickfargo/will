@@ -3,6 +3,10 @@
     { isArray } = require 'omicron'
     { slice } = Array::
 
+    Deferral   = null
+    Acceptance = null
+    Rejection  = null
+
     module.exports =
 
 
