@@ -156,8 +156,8 @@ Unifies the resolutions of an array of `futures` as a single `Promise`.
 
 ###### RETURNS
 
-`join` returns a returned `Promise` that will resolve with multiple arguments.
-Callbacks that consume the promise may include parameters for:
+`join` returns a `Promise` that will resolve with multiple arguments. Callbacks
+that consume the promise may include parameters for:
 
 * `results` : array — The list of resolved values from each of the `futures`.
   This list will include `undefined` values for `futures` that have not yet
