@@ -269,8 +269,10 @@ Specializes `join` to define a negative race, where the returned `Promise` will
 #### bind
 
       bind: ( onAccepted, onRejected ) ->
-        @once 'accepted', onAccepted if typeof onAccepted is 'function'
-        @once 'rejected', onRejected if typeof onRejected is 'function'
+        if typeof onAccepted is 'function'
+          @once 'accepted', -> try onAccepted.apply NULL_CONTEXT, arguments
+        if typeof onRejected is 'function'
+          @once 'rejected', -> try onRejected.apply NULL_CONTEXT, arguments
         return
       done: @::bind
 
