@@ -225,7 +225,7 @@ that consume the promise may include parameters for:
 #### all
 
 Specializes `join` to the default case, where the returned `Promise` will
-`accept` only after all `futures` are accepted (fulfilled), and will `reject`
+`accept` only after all `futures` are accepted (fulfilled), or will `reject`
 immediately after any one of the `futures` is rejected.
 
       @all = ( futures ) -> join futures
@@ -234,7 +234,7 @@ immediately after any one of the `futures` is rejected.
 #### none
 
 Specializes `join` to define the polar opposite of `all`, where the returned
-`Promise` will `accept` only after all `futures` are rejected, and will
+`Promise` will `accept` only after all `futures` are rejected, or will
 `reject` immediately after any one of the `futures` is accepted.
 
       @none = ( futures ) -> join futures, null, no
@@ -243,8 +243,8 @@ Specializes `join` to define the polar opposite of `all`, where the returned
 #### any
 
 Specializes `join` to define a **race**, where the returned `Promise` will
-`accept` after any subset of `futures` of size `limit` are accepted, and will
-`reject` after enough `futures` have rejected to make acceptance impossible.
+`accept` after any subset of `futures` of size `limit` are accepted, or will
+`reject` after enough `futures` have rejected to preclude its acceptance.
 
       @any = ( limit, futures ) ->
         if futures is undefined then futures = limit; limit = 1
@@ -254,8 +254,8 @@ Specializes `join` to define a **race**, where the returned `Promise` will
 #### notAny
 
 Specializes `join` to define a negative race, where the returned `Promise` will
-`accept` after any subset of `futures` of size `limit` are rejected, and will
-`reject` after enough `futures` have accepted to make acceptance impossible.
+`accept` after any subset of `futures` of size `limit` are rejected, or will
+`reject` after enough `futures` have accepted to preclude its acceptance.
 
       @notAny = ( limit, futures ) ->
         if futures is undefined then futures = limit; limit = 1
