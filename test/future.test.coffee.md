@@ -7,7 +7,7 @@
 
 
 
-    describe.only "Future:", ->
+    describe "Future:", ->
 
       describe "join", ->
         { join, all, none, any, notAny } = Future
