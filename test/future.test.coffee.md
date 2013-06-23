@@ -7,7 +7,7 @@
 
 
 
-    describe "Future:", ->
+    describe.only "Future:", ->
 
       describe "join", ->
         { join, all, none, any, notAny } = Future
@@ -111,7 +111,7 @@
                 willBe 0
                 willBe e1 = new Error
                 willBe 2
-                willBe e2 = new Error
+                willBe e2 = new Error  # <-- acceptance precluded here
                 willBe 4
               ]
               promise.then null, ( results, order, value, index ) ->
@@ -127,3 +127,46 @@
                 expect( results[4] ).to.equal undefined
                 do end
 
+          describe "notAny", ->
+
+            it "accepts immediately once rejection is impossible", ( end ) ->
+              promise = notAny 3, [
+                willBe e1 = new Error
+                willBe e2 = new Error
+                willBe 2
+                willBe e3 = new Error  # <-- acceptance assured here
+                willBe 4
+              ]
+              promise.then ( results, order, value, index ) ->
+                expect( results ).to.be.instanceof Array
+                expect( results.length ).to.equal 5
+                expect( results[3] ).to.equal value
+                expect( index ).to.equal 3
+                expect( value ).to.equal e3
+                expect( results[0] ).to.equal e1
+                expect( results[1] ).to.equal e2
+                expect( results[2] ).to.equal 2
+                expect( results[3] ).to.equal e3
+                expect( results[4] ).to.equal undefined
+                do end
+
+            it "rejects immediately once acceptance is impossible", ( end ) ->
+              promise = notAny 3, futures = [
+                willBe 0
+                willBe e1 = new Error
+                willBe 2
+                willBe 3  # <-- acceptance precluded, too many futures accepted
+                willBe e2 = new Error
+              ]
+              promise.then null, ( results, order, value, index ) ->
+                expect( results ).to.be.instanceof Array
+                expect( results.length ).to.equal 5
+                expect( results[3] ).to.equal value
+                expect( index ).to.equal 3
+                expect( value ).to.equal 3
+                expect( results[0] ).to.equal 0
+                expect( results[1] ).to.equal e1
+                expect( results[2] ).to.equal 2
+                expect( results[3] ).to.equal 3
+                expect( results[4] ).to.equal undefined
+                do end
