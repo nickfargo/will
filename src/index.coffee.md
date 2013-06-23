@@ -1,5 +1,7 @@
     module.exports =
 
+      VERSION : '0.0.1'
+
       state       : require 'state'
 
       Future      : require './future'
