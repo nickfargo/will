@@ -155,8 +155,8 @@ Unifies the resolutions of an array of `futures` as a single `Promise`.
   When `true` (default), the returned promise will `accept` once a sufficient
   number of the joined `futures` are accepted/fulfilled, and `reject` once too
   many `futures` are rejected. When `false`, the resolutions of the returned
-  promise are reversed: it will `reject` when enough `futures` are accepted
-  and `accept` when too many `futures` are rejected.
+  promise are reversed: it will `reject` once too many `futures` are accepted
+  and `accept` once enough `futures` are rejected.
 
 ###### RETURNS
 
