@@ -184,33 +184,39 @@ that consume the promise may include parameters for:
 
 ###### SOURCE
 
+Over the iteration of `futures`, the constant `limit` will be constrained
+between a rising `floor` and falling `ceiling`, where each acceptance causes
+the `floor` to rise, and each rejection causes the `ceiling` to fall. The
+promised `deferral` will accept if `limit` is struck first “on the feet” by
+`floor`, or will reject if struck first “in the head” by `ceiling`.
+
       @join = join = ( futures, limit, positive = yes ) ->
-        throw TypeError unless ( length = futures?.length )?
-        limit = length unless limit?
-        throw RangeError unless 0 <= limit <= length
-        if length is 0 or limit is 0
+        floor = 0; ceiling = futures?.length
+        throw TypeError unless ceiling?
+        limit = ceiling unless limit?
+        throw RangeError unless floor <= limit <= ceiling
+        if ceiling is floor or limit is floor
           return ( if positive then Rejection else Acceptance ).promise()
 
         { isFuturoid, resolve } = Future
-        count = 0
-        results = Array length
+        results = Array ceiling
         order = []
         deferral = new Deferral
 
-        for future, index in futures
+        iterate = ( future, index ) ->
           future = future() if typeof future is 'function'
           future = resolve future unless isFuturoid future
 
-          expectation = do ( index ) -> ( payload ) ->
+          expectation = ( payload ) ->
             results[ index ] = payload
             order.push index
-            if ++count >= limit
+            if ++floor >= limit
               deferral.accept results, order, payload, index
 
-          contingency = do ( index ) -> ( payload ) ->
+          contingency = ( payload ) ->
             results[ index ] = payload
             order.push index
-            if --length < limit
+            if --ceiling < limit
               deferral.reject results, order, payload, index
 
           if positive
@@ -219,6 +225,7 @@ that consume the promise may include parameters for:
           method = if future instanceof Future then 'bind' else 'then'
           future[ method ] onAccepted, onRejected
 
+        iterate future, index for future, index in futures
         deferral.promise()
 
 
