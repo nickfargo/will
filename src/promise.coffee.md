@@ -15,6 +15,9 @@ from affecting it.
       allowed =
         getStateName: yes
         once: yes
+        getValue: yes
+        getValues: yes
+        getContext: yes
 
 
 ### Constructor

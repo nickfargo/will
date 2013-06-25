@@ -204,6 +204,10 @@ Uses `value` to decide the fate of `this` deferral. If `value` is a futuroid or
 
           completed: state 'conclusive abstract',
 
+            getValue: -> @_values?[0]
+            getValues: -> @_values?[..] or null
+            getContext: -> @_context
+
 
 #### resolved.completed.accepted
 
