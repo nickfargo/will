@@ -151,12 +151,13 @@ Unifies the resolutions of an array of `futures` as a single `Promise`.
   `positive`, or will `reject` once too many `futures` have resolved against
   the expected outcome.
 
-* `positive` : boolean — Indicates the **polarity** of the `join` operation.
+* `positive` : boolean — Indicates the **polarity** of the `join` operation,
+  defining which resolution state of the provided `futures` is to be expected.
   When `true` (default), the returned promise will `accept` once a sufficient
-  number of the joined `futures` are accepted/fulfilled, and `reject` once too
-  many `futures` are rejected. When `false`, the resolutions of the returned
-  promise are reversed: it will `reject` once too many `futures` are accepted
-  and `accept` once enough `futures` are rejected.
+  number of the joined `futures` are accepted, or `reject` once too many
+  `futures` are rejected. When `false`, the `futures` are perceived in reverse:
+  the returned promise will `accept` once enough are rejected, or `reject` once
+  too many are accepted.
 
 ###### RETURNS
 
@@ -184,11 +185,12 @@ that consume the promise may include parameters for:
 
 ###### SOURCE
 
-Over the iteration of `futures`, the constant `limit` will be constrained
-between a rising `floor` and falling `ceiling`, where each acceptance causes
-the `floor` to rise, and each rejection causes the `ceiling` to fall. The
-promised `deferral` will accept if `limit` is struck first “on the feet” by
-`floor`, or will reject if struck first “in the head” by `ceiling`.
+The constant value `limit` will remain clamped between a rising `floor` and a
+falling `ceiling`. The `futures` are then observed, such that each *expected*
+outcome will cause the `floor` to rise, and each *contingent* outcome will
+cause the `ceiling` to fall. The returned promised will then `accept` if
+`limit` is struck first “on the feet” by `floor`, or will `reject` if struck
+first “in the head” by `ceiling`.
 
       @join = join = ( futures, limit, positive = yes ) ->
         floor = 0; ceiling = futures?.length
