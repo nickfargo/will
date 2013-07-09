@@ -23,16 +23,17 @@
             d.once 'rejected', -> do end
             nextTick -> do d.reject
 
-        0 and
         describe "generalized resolutions / abstract states", ->
 
-          it "accepted implies completed", ( end ) ->
+          it "implies completed when accepted", ( end ) ->
             d = new Deferral
+            d.state('completed').virtualize( d.state() ).realize()
             d.state('completed').on 'enter', -> do end
             nextTick -> do d.accept
 
-          it "rejected implies completed", ( end ) ->
+          it "implies completed when rejected", ( end ) ->
             d = new Deferral
+            d.state('completed').virtualize( d.state() ).realize()
             d.state('completed').on 'enter', -> do end
             nextTick -> do d.reject
 
