@@ -115,8 +115,8 @@ Issues a `Promise` that attenuates the observable properties of `this`
 ### States
 
 `Deferral` uses the **[State][]** library to explicitly define concrete states
-[`pending`, `accepted`, `rejected`], expressions of their shared abstractions,
-and methods that describe a deferral’s specific behaviors within each state.
+[`pending`, `accepted`, `rejected`], their shared abstractions, and methods
+that describe a deferral’s specific behaviors within each state.
 
       state @::, 'abstract',
 
